@@ -1,4 +1,4 @@
-package com.DSA_Training.Graph_Classes.Day6;
+package com.DSA_Training.Graph_Classes.Classwork.Day6;
 
 import java.io.*;
 import java.util.*;

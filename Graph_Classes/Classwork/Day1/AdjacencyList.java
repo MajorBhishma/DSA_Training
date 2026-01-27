@@ -1,4 +1,4 @@
-package com.DSA_Training.Graph_Classes.Day1;
+package com.DSA_Training.Graph_Classes.Classwork.Day1;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,7 @@ public class AdjacencyList {
     }
 
     public static void main(String[] args) {
+
         adjList(7, new int[][]{{0,1},{1,2},{1,3},{3,4},{3,5},{5,6},{4,6}});
     }
 }
