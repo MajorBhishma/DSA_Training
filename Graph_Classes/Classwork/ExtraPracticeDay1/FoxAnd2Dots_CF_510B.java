@@ -1,4 +1,4 @@
-package com.DSA_Training.Graph_Classes.Classwork.ExtraQuestionsDay1;
+package com.DSA_Training.Graph_Classes.Classwork.ExtraPracticeDay1;
 import java.util.Arrays;
 import java.util.Scanner;
 
