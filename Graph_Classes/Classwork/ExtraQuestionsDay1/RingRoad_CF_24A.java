@@ -12,7 +12,7 @@ public class RingRoad_CF_24A {
 
             if(v!=p){
                 if(v==1) {
-                    return cost + w;
+                    return cost+w;
                 }
                 ans=Math.min(ans, DFS(adj, v, u, cost+w));
             }
