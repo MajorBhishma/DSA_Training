@@ -39,6 +39,7 @@ public class MakingGenomeInBerland_CF_638B {
                 }
             }
         }
+        
         String ans = "";
         for(int i=0; i<26; i++){
             if(indegree[i]==0){
