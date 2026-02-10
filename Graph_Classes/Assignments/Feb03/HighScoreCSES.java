@@ -42,7 +42,7 @@ public class HighScoreCSES {
 
                 if(dist[u]==INF) continue;
                 long newDist = dist[u]+d;
-                
+
                 if(newDist>dist[v]){
                     dist[v]=newDist;
                 }
