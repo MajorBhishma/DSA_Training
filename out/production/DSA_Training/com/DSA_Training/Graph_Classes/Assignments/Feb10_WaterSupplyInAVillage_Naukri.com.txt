@@ -1,0 +1,54 @@
+import java.util.*;
+public class Solution {
+
+    public static int supplyWater(int n, int k, int[] wells, int[][] pipes) {
+        // Write your code here
+
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++) adj.add(new ArrayList<>());
+
+        for(int[] i : pipes){
+            int u = i[0]-1;
+            int v = i[1]-1;
+            int w = i[2];
+
+            adj.get(u).add(new int[] {v,w});
+            adj.get(v).add(new int[] {u,w});
+        }
+        
+        Queue<int[]> q = new PriorityQueue<>((a,b) -> Integer.compare(a[1], b[1]));
+        boolean[] finalized = new boolean[n];
+
+        for(int i=0; i<n; i++){
+            q.offer(new int[]{i, wells[i]});
+        }
+
+        int cost = 0;
+        int count = 0;
+
+        while(!q.isEmpty()){
+            int[] node = q.poll();
+            int u = node[0];
+
+            if(finalized[u]) continue;
+            finalized[u] = true;
+
+            cost += node[1];
+
+            count++;
+            if(count==n) return cost;
+
+            for(int[] i : adj.get(u)){
+                int v = i[0];
+                int w = i[1];
+
+                if(!finalized[v]){
+                    q.offer(new int[]{v,w});
+                }
+            }
+        }
+        return cost;
+
+    }
+    
+}
