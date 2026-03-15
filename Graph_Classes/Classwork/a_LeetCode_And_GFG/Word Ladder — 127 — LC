@@ -1,0 +1,51 @@
+class Solution{
+    Set<String> wordSet;
+    Set<String> visited;
+
+    void addPossibleSequence(String node, Queue<String> q, String endWord){
+        int n = node.length();
+        for(int i=0; i<n; i++){
+            char[] tempNode = node.toCharArray();
+            char curr = tempNode[i];
+            for(char ch='a'; ch<='z'; ch++){
+                if(ch==curr) continue;
+                tempNode[i] = ch;
+
+                String temp = new String(tempNode);
+                if(wordSet.contains(temp)) {
+                    if(!visited.contains(temp)){
+                        q.offer(temp);
+                        visited.add(temp);
+                        if(visited.contains(endWord)) return;
+                    }
+                }
+            }
+        }
+    }
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        wordSet = new HashSet<>();
+        visited = new HashSet<>();
+
+        for(String s : wordList) wordSet.add(s);
+        if(!wordSet.contains(endWord)) return 0;
+
+        Queue<String> q = new ArrayDeque<>();
+        q.offer(beginWord);
+        visited.add(beginWord);
+
+        int count = 0;
+        while(!q.isEmpty()){
+            int size = q.size();
+            count++;
+
+            for(int i=0; i<size; i++){
+                String node = q.poll();
+
+                addPossibleSequence(node, q, endWord);
+                if(visited.contains(endWord)) return count+1;
+            }
+        }
+
+        return 0;
+    }
+}

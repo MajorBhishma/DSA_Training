@@ -1,0 +1,97 @@
+class Solution {
+
+    int dijkstra(int src, List<List<int[]>> adj, int k, int n){
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src]=0;
+
+        boolean[] finalized = new boolean[n];
+        Queue<int[]> q = new PriorityQueue<>((a,b) -> Integer.compare(a[1], b[1]));
+
+        q.offer(new int[]{src, 0});
+        while(!q.isEmpty()){
+            int[] node = q.poll();
+
+            int u = node[0];
+            if(finalized[u]) continue;
+            finalized[u]=true;
+
+            for(int[] i : adj.get(u)){
+                int v = i[0];
+                int d = i[1];
+
+                if(!finalized[v]){
+                    int newDist = dist[u] + d;
+
+                    if(newDist < dist[v]){
+                        dist[v] = newDist;
+                        q.offer(new int[] {v, newDist});
+                    }
+                }
+            }
+        }
+
+        int count = 0;
+        for(int i : dist){
+            if(i<=k) count++;
+        }
+        return count-1;
+    }
+
+    int BFS(int src, List<List<int[]>> adj, int k, int n){
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src]=0;
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[] {src, 0});
+
+        int count = 0;
+
+        while(!q.isEmpty()){
+            boolean found = false;
+            int[] node = q.poll();
+            int u = node[0];
+
+            for(int[] j : adj.get(u)){
+                int v = j[0];
+                int d = j[1];
+
+                int newDist = dist[u] + d;
+                if(newDist<dist[v] && newDist<=k){
+                    if(dist[v] == Integer.MAX_VALUE) count++;
+                    dist[v]= newDist;
+                    q.offer(new int[] {v, newDist});
+                    found = true;
+                }
+            }
+            if(!found) break;
+        }
+        return count;
+    }
+
+    public int findTheCity(int n, int[][] edges, int k) {
+
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++) adj.add(new ArrayList<>());
+
+        for(int[] i : edges){
+            int u = i[0];
+            int v = i[1];
+            int w = i[2];
+            adj.get(u).add(new int[]{v,w});
+            adj.get(v).add(new int[]{u,w});
+        }
+        int ans = 0;
+        int maxx = Integer.MAX_VALUE;
+        for(int i=0; i<n; i++){
+            int x = dijkstra(i, adj, k, n);
+            // int x = BFS(i, adj, k, n);
+            if(x<=maxx) {
+                ans = i;
+                maxx = x;
+            }
+        }
+
+        return ans;
+    }
+}

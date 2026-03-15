@@ -1,0 +1,62 @@
+class Solution {
+    int[] parent;
+    int[] size;
+
+    int findParent(int x){
+        int p = parent[x];
+
+        if(p==x) return p;
+
+        return parent[x]=findParent(p);
+    }
+
+    void union(int x, int y){
+        int px = findParent(x);
+        int py = findParent(y);
+
+        if(px==py) return;
+
+        if(size[px] > size[py]){
+            parent[py] = px;
+            size[px]+=size[py];
+        }
+
+        else{
+            parent[px] = py;
+            size[py]+=size[px];
+        }
+    }
+
+    public long countPairs(int n, int[][] edges) {
+        List<Integer> components = new ArrayList<>();
+
+        parent = new int[n];
+        for(int i=0; i<n; i++) parent[i] = i;
+
+        size = new int[n];
+        Arrays.fill(size, 1);
+
+        boolean[] visited = new boolean[n];
+        for(int[] i : edges){
+            int x = i[0];
+            int y = i[1];
+
+            union(x, y);
+        }
+
+        long remaining = n;
+        long ans = 0L;
+
+
+        for(int i=0; i<n; i++){
+            if(parent[i]==i){
+                long s = size[i];
+                remaining -= s;
+                ans += s*remaining;
+            }
+        }
+
+        return ans;
+
+    }
+}

@@ -1,0 +1,47 @@
+class Solution {
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+        double[] dist = new double[n];
+        boolean[] finall = new boolean[n];
+        PriorityQueue<double[]> q = new PriorityQueue<>((a,b) -> Double.compare(b[1],a[1]));
+
+        Arrays.fill(dist,Double.MIN_VALUE);
+        dist[start] = (double)1;
+
+        List<List<double[]>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++) adj.add(new ArrayList<>());
+
+        for(int i=0; i<edges.length; i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            double d = succProb[i];
+
+            adj.get(u).add(new double[] {v,d});
+            adj.get(v).add(new double[] {u,d});
+        }
+
+        q.offer(new double[] {start, 1});
+
+        while(!q.isEmpty()){
+            double[] node = q.poll();
+            int u = (int)node[0];
+
+            if(finall[u]) continue;
+            finall[u]=true;
+
+            for(double[] neigh : adj.get(u)){
+                int v = (int)neigh[0];
+                double dv = neigh[1];
+
+                double newDist = dv * dist[u];
+
+                if(newDist>dist[v]){
+                    q.offer(new double[]{v,newDist});
+                    dist[v]=newDist;
+                }
+            }
+            if(finall[end]) break;
+        }
+        double ans = dist[end];
+        return ans==Double.MIN_VALUE ? 0 : dist[end];
+    }
+}

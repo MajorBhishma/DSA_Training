@@ -1,0 +1,39 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int ans=0;
+        boolean[][] visited = new boolean[m][n];
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j]=='1' && !visited[i][j]){
+                    ans++;
+                    BFS(i,j,visited,grid);
+                }
+            }
+        }
+        return ans;
+    }
+
+    void BFS(int i, int j, boolean[][] visited, char[][] grid){
+        int m = grid.length;
+        int n = grid[0].length;
+        int[] dx = {0,0,-1,1};
+        int[] dy = {-1,1,0,0};
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[] {i,j});
+        visited[i][j]=true;
+        while(!q.isEmpty()){
+            int[] node = q.poll();
+            int a=node[0];
+            int b=node[1];
+            for(int k=0; k<4; k++){
+                if(a+dx[k]>=0 && a+dx[k]<m && b+dy[k]<n && b+dy[k]>=0 && !visited[a+dx[k]][b+dy[k]] && grid[a+dx[k]][b+dy[k]]=='1'){
+                    q.offer(new int[] {a+dx[k],b+dy[k]});
+                    visited[a+dx[k]][b+dy[k]]=true;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,50 @@
+class Solution {
+    int findParent(int curr){
+        int p = parent[curr];
+
+        if(p==curr) return p;
+
+        return parent[curr] = parent[p];
+    }
+
+    void union(int x, int y){
+        int px = findParent(x);
+        int py = findParent(y);
+
+        if(px==py) return;
+
+        if(size[px]>size[py]){
+            size[px]+=size[py];
+            parent[py]=px;
+        }
+        else{
+            size[py]+=size[px];
+            parent[px]=py;
+        }
+    }
+
+    int[] parent;
+    int[] size;
+    public int findCircleNum(int[][] isConnected) {
+        int ans=0, n=isConnected.length;
+        parent = new int[n];
+        for(int i=0; i<n; i++) parent[i]=i;
+
+        size = new int[n];
+        Arrays.fill(size, 1);
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<=i; j++){
+                if(isConnected[i][j]==1){
+                    union(i, j);
+                }
+            }
+        }
+
+        int count = 0;
+        for(int i=0; i<n; i++){
+            if(parent[i]==i) count++;
+        }
+        return count;
+    }
+}

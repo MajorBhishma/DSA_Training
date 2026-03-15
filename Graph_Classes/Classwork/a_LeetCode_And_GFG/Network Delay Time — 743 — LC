@@ -1,0 +1,53 @@
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        int[] dist = new int[n+1];
+        int maxx = Integer.MAX_VALUE;
+        Arrays.fill(dist,maxx);
+        dist[k]=0;
+
+        boolean[] picked = new boolean[n+1];
+
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i=0; i<=n; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] node : times){
+            int u = node[0];
+            int v = node[1];
+            int t = node[2];
+
+            adj.get(u).add(new int[] {v,t});
+        }
+
+        Queue<int[]> q = new PriorityQueue<>((a,b) -> Integer.compare(a[1],b[1]));
+        q.offer(new int[] {k,0});
+
+        while(!q.isEmpty()){
+            int[] node = q.poll();
+            int u = node[0];
+            if(picked[u]) continue;
+            picked[u]=true;
+
+            for(int[] i : adj.get(u)){
+                int v = i[0];
+                int d = i[1];
+
+                int newDist = dist[u] + d;
+                if(newDist<dist[v]){
+                    dist[v]=newDist;
+                    q.offer(new int[]{v,newDist});
+                }
+
+            }
+        }
+
+        int ans = 0;
+        for(int i=1; i<=n; i++){
+            int j = dist[i];
+            if(j==maxx) return -1;
+            ans=Math.max(ans, j);
+        }
+        return ans;
+    }
+}

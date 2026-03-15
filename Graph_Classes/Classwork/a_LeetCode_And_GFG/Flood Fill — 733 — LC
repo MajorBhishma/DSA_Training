@@ -1,0 +1,24 @@
+class Solution{
+    int[] dx;
+    int[] dy;
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int base = image[sr][sc];
+        if(base==color) return image;
+        dx = new int[] {0,0,-1,1};
+        dy = new int[] {-1,1,0,0};
+        int m=image.length, n=image[0].length;
+        DFS(base, sr, sc, color, image, m, n);
+        return image;
+    }
+
+    void DFS(int base, int sr, int sc, int color, int[][] image, int m, int n){
+        image[sr][sc]=color;
+        for(int i=0; i<4; i++){
+            int nx = sr+dx[i];
+            int ny = sc+dy[i];
+            if(nx>=0 && nx<m && ny>=0 && ny<n && image[nx][ny]==base){
+                DFS(base, nx, ny, color, image, m, n);
+            }
+        }
+    }
+}

@@ -1,0 +1,83 @@
+class Solution {
+    int[] dx = {1,0,-1,0};
+    int[] dy = {0,1,0,-1};
+    int n;
+    int[] parent;
+    int[] size;
+
+    int findRoot(int x){
+        int p = parent[x];
+
+        if(x==p) return x;
+
+        return parent[x]=findRoot(p);
+    }
+
+    void union(int u, int v){
+        int px = findRoot(u);
+        int py = findRoot(v);
+
+        if(px==py) return;
+
+        if(size[px]>size[py]){
+            parent[py]=px;
+            size[px]+=size[py];
+        }
+        else{
+            parent[px]=py;
+            size[py]+=size[px];
+        }
+    }
+
+    public int largestIsland(int[][] grid) {
+        n = grid.length;
+        parent = new int[n*n];
+        size = new int[n*n];
+
+        Arrays.fill(size, 1);
+        for(int i=0; i<n*n; i++){
+            parent[i] = i;
+        }
+
+        for(int x=0; x<n; x++){
+            for(int y=0; y<n; y++){
+                if(grid[x][y]==1){
+                    for(int k=0; k<2; k++){
+                        int nx = x + dx[k];
+                        int ny = y + dy[k];
+
+                        if(nx>=0 && nx<n && ny>=0 && ny<n && grid[nx][ny]==1){
+                            union(x*n + y, nx*n + ny);
+                        }
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+        for(int i : size) ans = Math.max(ans, i);
+
+        for(int x=0; x<n; x++){
+            for(int y=0; y<n; y++){
+                if(grid[x][y]==0){
+                    int sum = 1;
+
+                    Set<Integer> set = new HashSet<>();
+                    for(int k=0; k<4; k++){
+                        int nx = x + dx[k];
+                        int ny = y + dy[k];
+
+                        if(nx>=0 && nx<n && ny>=0 && ny<n && grid[nx][ny]==1){
+                            int p = findRoot(nx*n + ny);
+                            if(set.contains(p)) continue;
+                            set.add(p);
+                            sum+=size[p];
+                        }
+                    }
+                    ans=Math.max(ans, sum);
+                }
+            }
+        }
+        return ans;
+    }
+}
