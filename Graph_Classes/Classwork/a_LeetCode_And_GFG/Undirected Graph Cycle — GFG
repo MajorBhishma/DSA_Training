@@ -1,0 +1,44 @@
+class Solution {
+    public boolean isCycle(int V, int[][] edges) {
+        List<List<Integer>> adj = new ArrayList<>();
+        boolean[] visited = new boolean[V];
+        int[] parent = new int[V];
+
+        for(int i=0; i<V; i++) adj.add(new ArrayList<>());
+        Arrays.fill(parent, -1);
+
+        for(int[] i : edges){
+            int x = i[0];
+            int y = i[1];
+            adj.get(x).add(y);
+            adj.get(y).add(x);
+        }
+
+
+        for(int i=0; i<V; i++){
+            if(!visited[i]){
+                if(DFS(i, visited, parent, adj)==true) return true;
+            }
+        }
+        return false;
+    }
+
+    boolean DFS(int start, boolean[] visited, int[] parent, List<List<Integer>> adj){
+
+        visited[start]=true;
+
+        for(int i : adj.get(start)){
+            if(parent[start]!=i){
+
+                if(visited[i] && parent[i]!=-1) return true;
+
+                else{
+                    parent[i]=start;
+                    if (DFS(i, visited, parent, adj)==true) return true;
+
+                }
+            }
+        }
+        return false;
+    }
+}

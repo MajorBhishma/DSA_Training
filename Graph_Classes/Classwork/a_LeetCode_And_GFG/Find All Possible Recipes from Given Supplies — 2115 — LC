@@ -1,0 +1,59 @@
+class Solution {
+    public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
+
+        Set<String> set = new HashSet<>();
+        for(String s : supplies) set.add(s);
+
+        int n = recipes.length;
+        List<String> ans = new ArrayList<>();
+
+        boolean neww = true;
+        while(neww){
+            neww = false;
+
+            for(int i=0; i<n; i++){
+                boolean notFound = false;
+                for(String s : ingredients.get(i)){
+                    if(!set.contains(s)) {
+                        notFound = true;
+                        break;
+                    }
+                }
+                if(!notFound && set.add(recipes[i])){
+                    neww = true;
+                    ans.add(recipes[i]);
+                }
+
+            }
+        }
+
+        return ans;
+
+    }
+}
+
+
+class Solution {
+    public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
+   HashMap<String, Integer> map = new HashMap<>();
+
+        int n = 0;
+        for(String s : recipes){
+            if(!map.containsKey(s)) map.put(s,n++);
+        }
+
+        for(List<String> lst  : ingredients){
+            for(String s : lst){
+                if(!map.containsKey(s)) map.put(s,n++);
+            }
+        }
+
+        int[] inDegree = new int [n];
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++) adj.add(new ArrayList<>());
+
+        for(int i=0; i<recipes.length; i++){
+            for(String s : ingredients.get(i)){
+                adj.get()
+            }
+        }

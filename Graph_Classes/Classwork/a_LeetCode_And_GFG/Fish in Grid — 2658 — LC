@@ -1,0 +1,68 @@
+class Solution {
+    int[] parent;
+    int[][] size;
+    int n, m;
+
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,-1,1};
+
+    int findParent(int x){
+        int p = parent[x];
+
+        if(p==x) return x;
+
+        return parent[x] = findParent(p);
+    }
+    void union(int ux, int uy, int vx, int vy){
+        int pu = findParent(ux*n + uy);
+        int pv = findParent(vx*n + vy);
+
+        if(pu==pv) return;
+
+        if(size[pu/n][pu%n] > size[pv/n][pv%n]){
+            parent[pv] = pu;
+            size[pu/n][pu%n] += size[pv/n][pv%n];
+        }
+
+        else{
+            parent[pu] = pv;
+            size[pv/n][pv%n] += size[pu/n][pu%n];
+        }
+    }
+    public int findMaxFish(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+
+        parent = new int[m*n];
+        size = grid.clone();
+
+        for(int i=0; i<m*n; i++){
+            parent[i] = i;
+        }
+
+        for(int x=0; x<m; x++){
+            for(int y=0; y<n; y++){
+                if(grid[x][y]==0) continue;
+
+                for(int k=0; k<4; k++){
+                    int nx = x + dx[k];
+                    int ny = y + dy[k];
+
+                    if(nx>=0 && nx<m && ny>=0 && ny<n && grid[nx][ny]>0){
+                        union(x, y, nx, ny);
+                    }
+                }
+            }
+        }
+
+        int max = 0;
+
+        for(int[] i : size){
+            for (int j : i){
+                max = Math.max(max, j);
+            }
+        }
+
+        return max;
+    }
+}

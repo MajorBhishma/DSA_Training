@@ -1,0 +1,74 @@
+class Solution {
+    int[] parent;
+    int[] size;
+
+    int findParent(int x){
+        int p = parent[x];
+
+        if(p==x) return x;
+
+        return parent[x] = findParent(p);
+    }
+    void union(int x, int y){
+        int px = findParent(x);
+        int py = findParent(y);
+
+        if(px==py) return;
+
+        if(size[px] > size[py]){
+            size[px] += size[py];
+            parent[py] = px;
+        }
+
+        else{
+            size[py] += size[px];
+            parent[px] = py;
+        }
+    }
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        char[] arr = s.toCharArray();
+        int n = arr.length;
+
+        parent = new int[n];
+        size = new int[n];
+
+        Arrays.fill(size, 1);
+        for(int i=0; i<n; i++) parent[i] = i;
+
+        for(List<Integer> i : pairs){
+            int u = i.get(0);
+            int v = i.get(1);
+
+            union(u, v);
+        }
+
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        for(int i = 0; i<n; i++){
+            int p = findParent(i);
+            if(!map.containsKey(p)){
+                map.put(p, new ArrayList<>());
+            }
+
+            map.get(p).add(i);
+        }
+
+        for(Map.Entry<Integer, List<Integer>> entry : map.entrySet()){
+            List<Integer> indexes = entry.getValue();
+
+            List<Character> letters = new ArrayList<>();
+
+            for(int i : indexes) letters.add(arr[i]);
+
+            Collections.sort(letters);
+
+            int len = letters.size();
+
+            for(int i=0; i<len; i++){
+                arr[indexes.get(i)] = letters.get(i);
+            }
+        }
+
+        return new String(arr);
+    }
+}
