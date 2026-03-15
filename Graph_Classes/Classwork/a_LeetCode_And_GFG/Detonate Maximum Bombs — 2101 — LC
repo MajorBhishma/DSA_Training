@@ -1,0 +1,59 @@
+class Solution {
+    public int maximumDetonation(int[][] bombs) {
+        int n = bombs.length, ans=0;
+        List<List<Integer>> adj = new ArrayList<>();
+
+        for(int i=0; i<n; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0; i<n; i++){
+            int x1 = bombs[i][0];
+            int y1 = bombs[i][1];
+            long r1 = bombs[i][2];
+
+            for(int j=i+1; j<n; j++){
+                int x2 = bombs[j][0];
+                int y2 = bombs[j][1];
+                long r2 = bombs[j][2];
+
+                long x = Math.abs(x2-x1);
+                long y = Math.abs(y2-y1);
+
+                long dist = x*x + y*y;
+
+                if(r1*r1>=dist) adj.get(i).add(j);
+                if(r2*r2>=dist) adj.get(j).add(i);
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            ans = Math.max(ans, BFS(adj, i, new boolean[n]));
+        }
+
+        return ans;
+    }
+
+    int BFS(List<List<Integer>> adj, int start, boolean[] visited){
+        Queue<Integer> q = new LinkedList<>();
+        int count = 0;
+
+        q.offer(start);
+        visited[start] = true;
+
+        while(!q.isEmpty()){
+            int node = q.poll();
+            count++;
+
+            for(int i : adj.get(node)){
+                if(!visited[i]){
+                    q.offer(i);
+                    visited[i]=true;
+                }
+            }
+        }
+
+        return count;
+
+    }
+}
